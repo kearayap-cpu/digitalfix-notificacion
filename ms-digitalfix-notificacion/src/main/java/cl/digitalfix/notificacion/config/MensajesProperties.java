@@ -70,6 +70,7 @@ public class MensajesProperties {
         private String despachoDlq;
         private String reporte;
         private String reporteDlq;
+        private String interna;
 
         public String getGmail() {
             return gmail;
@@ -118,6 +119,14 @@ public class MensajesProperties {
         public void setReporteDlq(String reporteDlq) {
             this.reporteDlq = reporteDlq;
         }
+
+        public String getInterna() {
+    return interna;
+}
+
+        public void setInterna(String interna) {
+            this.interna = interna;
+        }
     }
 
     public static class RoutingKeys {
@@ -130,6 +139,7 @@ public class MensajesProperties {
         private String reporteDirecta;
         private String reporteTema;
         private String reporteDlq;
+        private String internaDirecta;
 
         public String getGmailDirecta() {
             return gmailDirecta;
@@ -202,5 +212,14 @@ public class MensajesProperties {
         public void setReporteDlq(String reporteDlq) {
             this.reporteDlq = reporteDlq;
         }
+
+        public String getInternaDirecta() {
+            return internaDirecta;
+        }
+
+        public void setInternaDirecta(String internaDirecta) {
+            this.internaDirecta = internaDirecta;
+        }
+        
     }
 }

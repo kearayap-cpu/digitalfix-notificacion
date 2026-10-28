@@ -11,7 +11,7 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://login.microsoftonline.com/cc0041c5-4918-4ed1-9a20-23dc386471d4/v2.0
-          audiences: 415c10b4-9fe0-438c-a3a2-73224c062448
+          audiences: 898e9076-6eb3-4901-a900-1017f8a7a2f6
 
   rabbitmq:
     host: ${RABBITMQ_HOST:127.0.0.1}
@@ -38,6 +38,7 @@ digitalfix:
       despacho-dlq: q.cmd.dispatch.dlq
       reporte: q.cmd.report
       reporte-dlq: q.cmd.report.dlq
+      interna: q.cmd.notificaciones.internas
 
     routing-keys:
       gmail-directa: email.send
@@ -49,3 +50,4 @@ digitalfix:
       reporte-directa: report.gen
       reporte-tema: report.*
       reporte-dlq: report.dlq
+      interna-directa: notificacion.interna
