@@ -1,14 +1,24 @@
+
 server:
   port: 8083
 
 spring:
   application:
     name: ms-digitalfix-notificacion
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://login.microsoftonline.com/cc0041c5-4918-4ed1-9a20-23dc386471d4/v2.0
+          audiences: 415c10b4-9fe0-438c-a3a2-73224c062448
+
   rabbitmq:
-    host: 127.0.0.1
+    host: ${RABBITMQ_HOST:127.0.0.1}
     port: 5672
-    username: admin
-    password: admin123
+    username: ${RABBITMQ_USER:admin}
+    password: ${RABBITMQ_PASSWORD}
+
     listener:
       simple:
         acknowledge-mode: manual
@@ -20,6 +30,7 @@ digitalfix:
       directo: cmd.direct
       tema: cmd.topic
       dead-letter: cmd.dead.dlx
+
     colas:
       gmail: q.cmd.email
       gmail-dlq: q.cmd.email.dlq
@@ -27,6 +38,7 @@ digitalfix:
       despacho-dlq: q.cmd.dispatch.dlq
       reporte: q.cmd.report
       reporte-dlq: q.cmd.report.dlq
+
     routing-keys:
       gmail-directa: email.send
       gmail-tema: email.*
