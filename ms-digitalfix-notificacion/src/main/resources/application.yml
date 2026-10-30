@@ -53,6 +53,7 @@ digitalfix:
       reporte: q.cmd.report
       reporte-dlq: q.cmd.report.dlq
       interna: q.cmd.notificaciones.internas
+      interna-dlq: q.cmd.notificaciones.internas.dlq
 
     routing-keys:
       gmail-directa: email.send
@@ -65,3 +66,4 @@ digitalfix:
       reporte-tema: report.*
       reporte-dlq: report.dlq
       interna-directa: notificacion.interna
+      interna-dlq: notificacion.interna.dlq
