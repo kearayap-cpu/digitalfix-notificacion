@@ -68,7 +68,11 @@
             <artifactId>ojdbc11</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+        <!-- Envio real de correos mediante SMTP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
 
     </dependencies>
 
