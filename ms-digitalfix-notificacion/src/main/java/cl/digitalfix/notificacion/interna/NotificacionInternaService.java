@@ -2,65 +2,63 @@
 package cl.digitalfix.notificacion.interna;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class NotificacionInternaService {
 
-    private final AtomicLong secuencia = new AtomicLong(1);
+    private final NotificacionInternaRepository repository;
 
-    private final ConcurrentHashMap<String, CopyOnWriteArrayList<NotificacionInterna>>
-            notificacionesPorUsuario = new ConcurrentHashMap<>();
+    public NotificacionInternaService(
+            NotificacionInternaRepository repository) {
+        this.repository = repository;
+    }
 
+    // Guardar una notificacion en Oracle
+    @Transactional
     public NotificacionInterna crear(NotificacionInterna notificacion) {
 
         if (notificacion.getUsuarioId() == null
                 || notificacion.getUsuarioId().isBlank()) {
-            throw new IllegalArgumentException("El usuarioId es obligatorio");
+            throw new IllegalArgumentException(
+                    "El usuarioId es obligatorio"
+            );
         }
 
-        notificacion.setId(secuencia.getAndIncrement());
+        // El ID ahora lo genera Oracle
+        notificacion.setId(null);
         notificacion.setLeida(false);
 
-        notificacionesPorUsuario
-                .computeIfAbsent(
-                        notificacion.getUsuarioId(),
-                        clave -> new CopyOnWriteArrayList<>()
-                )
-                .add(notificacion);
-
-        return notificacion;
+        return repository.save(notificacion);
     }
 
+    // Listar notificaciones del usuario
     public List<NotificacionInterna> listarPorUsuario(String usuarioId) {
-        return List.copyOf(
-                notificacionesPorUsuario.getOrDefault(
-                        usuarioId,
-                        new CopyOnWriteArrayList<>()
-                )
+        return repository.findByUsuarioIdOrderByFechaCreacionDesc(
+                usuarioId
         );
     }
 
+    // Contar notificaciones sin leer
     public long contarNoLeidas(String usuarioId) {
-        return listarPorUsuario(usuarioId).stream()
-                .filter(notificacion -> !notificacion.isLeida())
-                .count();
+        return repository.countByUsuarioIdAndLeidaFalse(usuarioId);
     }
 
-    public boolean marcarComoLeida(String usuarioId, Long notificacionId) {
+    // Marcar una notificacion como leida
+    @Transactional
+    public boolean marcarComoLeida(
+            String usuarioId,
+            Long notificacionId) {
 
-        for (NotificacionInterna notificacion : listarPorUsuario(usuarioId)) {
-
-            if (notificacion.getId().equals(notificacionId)) {
-                notificacion.setLeida(true);
-                return true;
-            }
-        }
-
-        return false;
+        return repository.findByIdAndUsuarioId(
+                notificacionId,
+                usuarioId
+        ).map(notificacion -> {
+            notificacion.setLeida(true);
+            repository.save(notificacion);
+            return true;
+        }).orElse(false);
     }
 }

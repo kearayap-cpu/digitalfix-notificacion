@@ -6,6 +6,20 @@ spring:
   application:
     name: ms-digitalfix-notificacion
 
+  datasource:
+    url: ${DB_URL:jdbc:oracle:thin:@localhost:1521:XE}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+
   security:
     oauth2:
       resourceserver:
